@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Scratch Card Message</title>
+  <style>
+    body {
+      background: #fef7e2;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      color: #ff6f61;
+    }
+
+    #scratch-container {
+      position: relative;
+      width: 300px;
+      height: 150px;
+      margin-top: 20px;
+      border: 2px dashed #aaa;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #message {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #fff7d1;
+      color: #333;
+      font-size: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✨ Scratch to Reveal Your Message ✨</h1>
+  <div id="scratch-container">
+    <div id="message">You are stronger than you think 💪</div>
+    <canvas id="scratch-canvas" width="300" height="150"></canvas>
+  </div>
+
+  <script>
+    const messages = [
+      "po pani chusuko",
+      " em ledu dolla",
+      "smile evvu mama",
+      "sarsarle enneno anukuntam",
+      "chusinde chalu bayalderu",
+      "lite tesuko kasepu tensions anni lite tisu",
+      " just wanna say💖",
+      "Breathe. Relax. Trust yourself 🌈",
+      "Keep going, you’re doing great! 🏃‍♀️",
+      "Happiness is in small moments ✨"
+    ];
+
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    document.getElementById("message").innerText = randomMessage;
+
+    const canvas = document.getElementById('scratch-canvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+
+    function drawMask() {
+      ctx.fillStyle = "#cccccc";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function clearCircle(x, y) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x, y, 20, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      isDrawing = true;
+      clearCircle(e.offsetX, e.offsetY);
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!isDrawing) return;
+      clearCircle(e.offsetX, e.offsetY);
+    });
+
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mouseleave', () => isDrawing = false);
+
+    // Touch support
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const x = e.touches[0].clientX - rect.left;
+      const y = e.touches[0].clientY - rect.top;
+      clearCircle(x, y);
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const x = e.touches[0].clientX - rect.left;
+      const y = e.touches[0].clientY - rect.top;
+      clearCircle(x, y);
+    });
+
+    drawMask();
+  </script>
+
+</body>
+</html>
